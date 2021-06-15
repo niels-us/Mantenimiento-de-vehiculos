@@ -12,11 +12,10 @@ import {
 
 let categoriasGlobal = [];
 
-const loading = document.getElementById('loading');
-
 const selectCategorias1 = gebid('selectCategorias1');
 const selectCategorias = gebid('selectCategorias');
 const contenedorVehiculos = gebid('contenedorVehiculos');
+const loading = gebid('loading');
 
 const formVehiculo = gebid('formVehiculo');
 const inputPlaca = gebid('inputPlaca');
@@ -33,7 +32,9 @@ formVehiculo.onsubmit = (e) => {
 		foto: inputFoto.value,
 		categoria_id: selectCategorias.value
 	};
+	activarLoading('Registrando vehículo...');
 	postVehiculo(objVehiculo).then((rpta) => {
+		desactivarLoading();
 		if (rpta) {
 			llamarGetVehiculos();
 		} else {
@@ -44,13 +45,12 @@ formVehiculo.onsubmit = (e) => {
 
 const activarLoading = (mensaje) => {
 	loading.style.display = 'flex';
-	loading.style.innerText = mensaje
-}
+	loading.innerText = mensaje;
+};
 
-const desactivarLoading = () => loading.style.display = 'flex';
+const desactivarLoading = () => (loading.style.display = 'none');
 
 const llenarVehiculos = (vehiculos) => {
-
 	contenedorVehiculos.innerHTML = '';
 
 	vehiculos.forEach((objVehiculo) => {
@@ -86,6 +86,8 @@ const llenarVehiculos = (vehiculos) => {
 
 		pCategoria.innerHTML = `<strong>Categoria: </strong> ${objCategoria.nombre}`;
 
+
+
 		const btnEliminar = create('button');
 		btnEliminar.classList.add('btn', 'btn-danger', 'mx-1');
 		btnEliminar.setAttribute('id', 'btnEliminar')
@@ -103,7 +105,10 @@ const llenarVehiculos = (vehiculos) => {
 			traerVehiculo(objVehiculo);
 		};
 
-		btnAccion.innerText = 'Select';
+
+		// const btnAccion = create('button');
+		// btnAccion.classList.add('btn', 'btn-primary');
+		btnAccion.innerText = 'More...';
 
 		colMd4.append(card);
 		card.append(imagen);
@@ -128,21 +133,29 @@ const llenarCategorias = (categorias) => {
 };
 
 const llamarGetVehiculos = () => {
+	activarLoading('Cargando vehículos...');
 	getVehiculos().then((vehiculos) => {
+		desactivarLoading();
 		llenarVehiculos(vehiculos);
 	});
 };
 
+activarLoading('Cargando categorias...');
+
 getCategorias().then((categorias) => {
 	categoriasGlobal = categorias;
 	llenarCategorias(categorias);
+	desactivarLoading();
 	llamarGetVehiculos();
 });
+
 
 // implementando delete
 const EliminarVehiculo = (e) => {
 
-	console.log(e);
+	// console.log(e);
+
+	activarLoading('Eliminando vehiculo...');
 
 	let objVehiculo;
 	objVehiculo = e;
@@ -151,6 +164,7 @@ const EliminarVehiculo = (e) => {
 
 		if (rpta) {
 			llamarGetVehiculos();
+			desactivarLoading();
 		} else {
 			// TODO: Mostrar una ventana de error de creacións
 		}
@@ -165,7 +179,7 @@ const EliminarVehiculo = (e) => {
 // 	modalPelicula.show();
 // };
 
-const idVehiculo=gebid('idVehiculo');
+const idVehiculo = gebid('idVehiculo');
 const inputPlaca1 = gebid('inputPlaca1');
 const selectColor1 = gebid('selectColor1');
 const inputFoto1 = gebid('inputFoto1');
@@ -176,7 +190,7 @@ const traerVehiculo = (e) => {
 
 	// console.log(e);
 
-    idVehiculo.innerText=e.id
+	idVehiculo.innerText = e.id
 
 	selectCategorias1.value = e.categoria_id
 	inputPlaca1.value = e.placa
@@ -203,7 +217,7 @@ formVehiculo1.onsubmit = (e) => {
 		foto: inputFoto1.value,
 		categoria_id: selectCategorias1.value
 	};
-	putVehiculo(objVehiculo,idVehiculos).then((rpta) => {
+	putVehiculo(objVehiculo, idVehiculos).then((rpta) => {
 		if (rpta) {
 			llamarGetVehiculos();
 		} else {
