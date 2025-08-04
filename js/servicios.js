@@ -1,4 +1,4 @@
-const BASE_URL = 'https://60c17d104f7e880017dbfacd.mockapi.io';
+const BASE_URL = 'https://6890e1e3944bf437b597a3eb.mockapi.io';
 export const getCategorias = async () => {
 	const response = await fetch(`${BASE_URL}/categorias`, {
 		method: 'GET'

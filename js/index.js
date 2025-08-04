@@ -80,6 +80,8 @@ const llenarVehiculos = (vehiculos) => {
 
 		// Buscar en el arreglo global de categorías, aquella que cuyo ID coincida
 		// con el ID de la categoría actual del vehículo
+		console.log("categoriasGlobal", categoriasGlobal)
+		console.log("objVehiculo", objVehiculo)
 		let objCategoria = categoriasGlobal.find(
 			(objCategoria) => +objCategoria.id === +objVehiculo.categoria_id
 		);
